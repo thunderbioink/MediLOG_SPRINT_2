@@ -8,6 +8,9 @@ MediLOG began as an interactive Medical Database, integrated with SQL and Python
 
 Once running the program, the user is displayed with a *Menu*. In this *menu view*, the user can select up to five choices:
 
+### *FULL MAIN MENU DISPLAY:*
+![Main Menu](/images/main_menu.png)
+
 1. **Exit Program:**
 
     * Enter number *"0"* to pick.
@@ -18,6 +21,7 @@ Once running the program, the user is displayed with a *Menu*. In this *menu vie
     * Prompts user to enter the following information:
         * Name
         * Date of birth
+        * Diagnosis
         * Illness/Disability
         * Folder creation time and date
 
@@ -29,7 +33,8 @@ Once running the program, the user is displayed with a *Menu*. In this *menu vie
 4. **Search Patient Database**
     * Enter number *"3"* view different data inputed.
     * This will display an inner MENU where the user can display the following information:
-
+### *Option 3 Menu:*
+![Col1](/images/sp_menu3.png)
 
 The purpose of this program is to aid Health proffesionals in the administration of their patient records. This program is the first step into integrating a future patient database, where the patient will be able to log medication, dosage, and intake date and time. These future improvements will automatically update into their existing patient folder.
 
@@ -49,11 +54,6 @@ The cloud database used for this program is Firebase by Google. Where you can cr
 ### *Collection 2, view:*
 ![Col2](/images/col2.png)
 
-### *Collection 3, view:*
-![Col3](/images/cloudatabase_organize.png)
-
-### *Collection 4, view:*
-![Col4](/images/cloudatabase_organize.png)
 
 With the prior description, the visual organzation scheme for this program's data is in the Document form, where each Collection has it's own set of branches of information:
 
@@ -84,7 +84,7 @@ The programming language used for this program was the integration of Python and
 
 Improvement for this program:
 * Activate Notifications for database changes.
-* Activate delete medication log information. 
+* Activate delete and update logged medication information. 
 
 *Because the app I intend to create based on this program will handle health-related information that will aid health providers monitor their patients medication intake, I need to find I way to safely allow the user to modify their medication logs without deleting the patient itself.*
 * Make this program a workable web and phone app for the intended users. This will be a long-term goal. But implementation will begin soon.
