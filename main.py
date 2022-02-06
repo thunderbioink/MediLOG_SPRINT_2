@@ -34,8 +34,9 @@ def add_new_patient(db):
     first_name = str(input("First Name: "))
     last_name = str(input("Last Name: "))
     birthdate = (input("Date of Birth: "))
-    diagnosed = str(input("Diagnosed: "))
     injury_illness = str(input("Injury/Illness: "))
+    diagnosed = str(input("Diagnosed: "))
+    
 
     # Build a dictionary to hold the contents of the firestore document.
     data = {"First Name" : first_name, 
@@ -49,7 +50,7 @@ def add_new_patient(db):
     db.collection("Patients").add(data)
 
     # Save this in the Patient collection in Firestore : Check In Confirmation:      
-    log_checkin_confirmation(db, f" Added patient, {first_name} {last_name} born {birthdate}.Diagnosed with {injury_illness} and will recieve treatment for {diagnosed}.")
+    log_checkin_confirmation(db, f" Added patient, {first_name} {last_name} born {birthdate} with {injury_illness}.\nPatient will recieve treatment for {diagnosed}.\n")
 # NOT ACTIVE
 def delete_patient(db):
 #     """
@@ -103,18 +104,19 @@ def add_medication_intake(db):
     db.collection("Medication Log").add(data)
 
     # Save this in the Medication Confirmation collection in Firestore : Patient Medication Intake confirmation:    
-    log_medication_confirmation(db, f" {first_name} {last_name}, just logged medication intake for {medication}, with a dosage amount of {dosage} mg on {date}.\nDay and Time dosage was taken: ")
+    log_medication_confirmation(db, f" {first_name} {last_name}, just logged medication intake for {medication}, with a dosage amount of {dosage} mg on {date}.\nDay and Time dosage was taken:\n ")
     
 def search_patient_database(db):
     '''
     Search the database in multiple ways.
     '''
-
-    print("Select Query")
-    print("1) Show All Patient CheckIn Data\n")        
-    print("2) Show All Patient Medication Logs\n")
-    print("3) Show All Patient CheckIn Notifications\n")
-    print("4) Show Medication Log Notifications\n")
+    print("=================")
+    print("\n\nSEARCH OPTIONS:")
+    print("===============\n")
+    print("1) Show All Patient CheckIn Data")        
+    print("2) Show All Patient Medication Logs")
+    print("3) Show All Patient CheckIn Notifications")
+    print("4) Show Medication Log Notifications")
     
     choice = input("> ")
     print()
@@ -125,62 +127,42 @@ def search_patient_database(db):
             # Display all the results from choice:
                 # Display all the results from choice:
         print("")
-        print("Search Results\n")
-        all_results = db.collection("Patients").get()
-        for result in all_results:
-            # data = result.to_dict()
-            # print(f"ID: {result.id}")
-            # print(f"Fields: {data}")
-            print("\n")
-            print(f"{'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Date of Birth':<20}  {'Diagnosed':<18} {'Injury/Illness'}")
-            for result in results:
-                item = result.to_dict()
-                print(f"Patient ID:{result.id:<20}  {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {item['Date of Birth']:<20} {str(item['Diagnosed']):<18} {str(item['Injury/Illness'])}")
-                print("")
+        print("SEARCH RESULTS\n")
+        print("\n")
+        print(f"{'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Date of Birth':<20}  {'Diagnosed':<18} {'Injury/Illness'}")
+        for result in results:
+            item = result.to_dict()
+            print(f"PATIENT ID:{result.id:<20}  {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {item['Date of Birth']:<20} {str(item['Diagnosed']):<18} {str(item['Injury/Illness'])}\n\n")
+            # print("======================================================================================================================================================================")
     elif choice == "2":
         results = db.collection("Medication Log").get()
                 # Display all the results from choice:
         print("")
-        print("Search Results\n")
-        all_results = db.collection("Medication Log").get()
-        for result in all_results:
-            # data = result.to_dict()
-            # print(f"ID: {result.id}")
-            # print(f"Fields: {data}")
-            print("\n")
-            print(f" {'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Medication':<15}  {'Dosage (mg)':<12} {'Date'}")
-            for result in results:
-                item = result.to_dict()
-                print(f"Patient ID:{result.id:<10} {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {str(item['Medication']):<15} {float(item['Dosage (mg)']):<12} {item['Date']}") 
+        print("SEARCH RESULTS\n")
+        print("\n")
+        print(f" {'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Medication':<15}  {'Dosage (mg)':<12} {'Date'}")
+        for result in results:
+            item = result.to_dict()
+            print(f"PATIENT ID:{result.id:<10} {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {str(item['Medication']):<15} {float(item['Dosage (mg)']):<12} {item['Date']}\n\n") 
+            # print("======================================================================================================================================================================")
     elif choice == "3":
         results = db.collection("Check In Confirmation").get()
                 # Display all the results from choice:
         print("")
-        print("Search Results:")
-        all_results = db.collection("Check In Confirmation").get()
-        for result in all_results:
-            # data = result.to_dict()
-            # print(f"ID: {result.id}")
-            # print(f"Fields: {data}")
-            for result in results:
-                item = result.to_dict()
-                print("")
-                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}{item['TIMESTAMP']}\n\n")
-            
+        print("SEARCH RESULTS:")
+        for result in results:
+            item = result.to_dict()
+            print("=========================================================================")
+            print(f"PATIENT ID:{result.id:<20}\n{item['MESSAGE']:<20}{item['TIMESTAMP']}\n\n")
     elif choice == "4":
         results = db.collection("Medication Confirmation").get()
                 # Display all the results from choice:
         print("")
-        print("Search Results\n")
-        all_results = db.collection("Medication Confirmation").get()
-        for result in all_results:
-            data = result.to_dict()
-            # print(f"ID: {result.id}")
-            # print(f"Fields: {data}")
-            for result in results:
-                item = result.to_dict()
-                print("")
-                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}{item['TIMESTAMP']}\n\n")
+        print("SEARCH RESULTS\n")
+        for result in results:
+            item = result.to_dict()
+            print("=========================================================================")
+            print(f"PATIENT ID:{result.id:<20}\n{item['MESSAGE']:<20}{item['TIMESTAMP']}\n\n")      
     else:
         print("Not Valid Selection")
         return
@@ -238,7 +220,9 @@ def main():
     register_medication_time_intake_added(db)
     choice = None
     while choice != "0":
-        print("\n\n\n\nMEDILOG MENU:\n\n")
+        print("=================")
+        print("\n\nMediLOG MENU:\n")
+        print("=================")
         print("0) Exit")
         print("1) Add New Patient")
         print("2) Log Medication Intake")
