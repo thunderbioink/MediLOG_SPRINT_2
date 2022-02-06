@@ -67,6 +67,7 @@ Similar to the previous collection, this Collection will contain unique Document
 With the prior description, the visual organzation scheme for this program's data is in the Document form, where each Collection has it's own set of branches of information:
 
 ![Database Input Format](/images/cloudatabase_organize.png)
+
 *Image taken from ["What is a Cloud Database"](https://www.mongodb.com/cloud-database)*
 
 # Development Environment
