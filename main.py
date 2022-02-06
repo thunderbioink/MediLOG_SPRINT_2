@@ -236,8 +236,7 @@ def main():
             add_medication_intake(db)
         elif choice == "3":
             search_patient_database(db)
-        # elif choice == "4":
-        #     delete_patient(db)
+        
 
 if __name__ == "__main__":
     main()
