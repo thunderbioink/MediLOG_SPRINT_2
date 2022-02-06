@@ -48,27 +48,6 @@ def add_new_patient(db):
 
     # Save this in the Patient collection in Firestore : Check In Confirmation:      
     log_checkin_confirmation(db, f"Added {first_name} {last_name} born {birthdate}.\n\n\nDiagnosed with {diagnosed} and will recieve treatment for {injury_illness}. ")
-# NOT ACTIVE
-def delete_patient(db):
-#     """
-#     Prompt user to enter patient name and last name to delete.
-#     """
-    
-#     print("")
-#     print("Enter First and Last name of patient you want to delete:\n\n\n")
-#     first_name = str(input("First Name: "))
-#     last_name = str(input("Last Name: "))
-    
-#     #Check existing data:
-#     result = db.collection("Patients").document(first_name).get
-#     if result.exists:
-#         db.collection("Patients").document(first_name).delete()
-#         print(f"Removed {first_name} {last_name}.")
-#         data = result.to_dict()
-#         print(data)
-#     else:
-#         print(f"{first_name} {last_name} does not exist in Patient database.")
-    pass
 
 def add_medication_intake(db):
     '''
@@ -99,10 +78,10 @@ def search_patient_database(db):
     '''
 
     print("Select Query")
-    print("1) Show All Patient CheckIn Data\n")        
-    print("2) Show All Patient Medication Logs\n")
-    print("3) Show All Patient CheckIn Notifications\n")
-    print("4) Show Medication Log Notifications\n")
+    print("1) Show All Patient CheckIn Data")        
+    print("2) Show All Patient Medication Logs")
+    print("3) Show All Patient CheckIn Notifications")
+    print("4) Show Medication Log Notifiations")
     
     choice = input("> ")
     print()
@@ -168,27 +147,29 @@ def log_medication_confirmation(db, message):
     data = {"MESSAGE" : message, "TIMESTAMP" : firestore.SERVER_TIMESTAMP}
     db.collection("Medication Confirmation").add(data)    
 
-# NOT ACTIVE:
+
 def notify_patient_alert(results, changes, read_time):
-    # '''
-    # If patient was added, then display the changes.
-    # ADDED = Patient added medication log database.
-    # MODIFIED = Patient modified medication intake log.
-    # REMOVED = A medication intake log has been removed.
-    # '''
-    # for change in changes:
-    #     if change.type.name == "ADDED": 
-    #         print()
-    #         print(f"Patient logged medication intake: {change.document.id}")
-    #         print()
-    #     elif change.type.name == "MODIFIED":
-    #         print()
-    #         print(f"Patient modified medication intake log: {change.document.id}")
-    #         print()
-    #     elif change.type.name == "REMOVED":
-    #         print()
-    #         print(f"Patient modified medication intake log: {change.document.id}")
-    #         print()      
+    '''
+    If patient was added, then display the changes.
+    ADDED = Patient added medication log database.
+    MODIFIED = Patient modified medication intake log.
+    REMOVED = A medication intake log has been removed.
+    '''
+
+    for change in changes:
+        if change.type.name == "ADDED": 
+            print()
+            print(f"Patient logged medication intake: {change.document.id}")
+            print()
+        elif change.type.name == "MODIFIED":
+            print()
+            print(f"Patient modified medication intake log: {change.document.id}")
+            print()
+        elif change.type.name == "REMOVED":
+            print()
+            print(f"Patient modified medication intake log: {change.document.id}")
+            print()
+            
     pass
         
 def register_medication_time_intake_added(db):
@@ -207,7 +188,6 @@ def main():
         print("1) Add New Patient")
         print("2) Log Medication Intake")
         print("3) Search Patient Database")
-        # print("4) Delete Patient ")
         choice = input(f"> ")
         print()
         if choice == "1":
@@ -215,9 +195,7 @@ def main():
         elif choice == "2":
             add_medication_intake(db)
         elif choice == "3":
-            search_patient_database(db)
-        # elif choice == "4":
-        #     delete_patient(db)
+            search_patient_database(db)                        
 
 if __name__ == "__main__":
     main()
