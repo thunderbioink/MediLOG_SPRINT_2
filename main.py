@@ -49,7 +49,7 @@ def add_new_patient(db):
     db.collection("Patients").add(data)
 
     # Save this in the Patient collection in Firestore : Check In Confirmation:      
-    log_checkin_confirmation(db, f" Added patient, {first_name} {last_name} born {birthdate} on {firestore.SERVER_TIMESTAMP}.Diagnosed with {diagnosed} and will recieve treatment for {injury_illness}.\n")
+    log_checkin_confirmation(db, f" Added patient, {first_name} {last_name} born {birthdate}.Diagnosed with {injury_illness} and will recieve treatment for {diagnosed}.")
 # NOT ACTIVE
 def delete_patient(db):
 #     """
@@ -82,6 +82,7 @@ def add_medication_intake(db):
     last_name = str(input("Last Name: "))
     medication = str(input("Medication: "))
     dosage = float(input("Dosage (mg): "))
+    date = str(input("Date: "))
     # medication_time = input("Medication Time: ")
     
 #     medication_time = db.collection(u'Patients').document(u'result.id')
@@ -95,14 +96,14 @@ def add_medication_intake(db):
     data = {"First Name" : first_name, 
             "Last Name" : last_name,
             "Medication" : medication,
-            # "Medication Time" : medication_time,
+            "Date" : date,
             "TIMESTAMP" : firestore.SERVER_TIMESTAMP,
             "Dosage (mg)" : dosage,
             }
     db.collection("Medication Log").add(data)
 
     # Save this in the Medication Confirmation collection in Firestore : Patient Medication Intake confirmation:    
-    log_medication_confirmation(db, f" {first_name} {last_name}, just logged medication intake for {medication}, with a dosage amount of {dosage} mg. Day and Time dosage was taken: {firestore.SERVER_TIMESTAMP}.\n ")
+    log_medication_confirmation(db, f" {first_name} {last_name}, just logged medication intake for {medication}, with a dosage amount of {dosage} mg on {date}.\nDay and Time dosage was taken: ")
     
 def search_patient_database(db):
     '''
@@ -131,10 +132,10 @@ def search_patient_database(db):
             # print(f"ID: {result.id}")
             # print(f"Fields: {data}")
             print("\n")
-            print(f"{'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Date of Birth':<20}  {'Diagnosed':<20} {'Injury/Illness'}")
+            print(f"{'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Date of Birth':<20}  {'Diagnosed':<18} {'Injury/Illness'}")
             for result in results:
                 item = result.to_dict()
-                print(f"Patient ID:{result.id:<20}  {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {item['Date of Birth']:<20} {str(item['Diagnosed']):<20} {str(item['Injury/Illness'])}")
+                print(f"Patient ID:{result.id:<20}  {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {item['Date of Birth']:<20} {str(item['Diagnosed']):<18} {str(item['Injury/Illness'])}")
                 print("")
     elif choice == "2":
         results = db.collection("Medication Log").get()
@@ -147,10 +148,10 @@ def search_patient_database(db):
             # print(f"ID: {result.id}")
             # print(f"Fields: {data}")
             print("\n")
-            print(f" {'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Medication':<15}  {'Dosage (mg)':<12}")
+            print(f" {'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Medication':<15}  {'Dosage (mg)':<12} {'Date'}")
             for result in results:
                 item = result.to_dict()
-                print(f"Patient ID:{result.id:<10} {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {str(item['Medication']):<15} {float(item['Dosage (mg)']):<12}") 
+                print(f"Patient ID:{result.id:<10} {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {str(item['Medication']):<15} {float(item['Dosage (mg)']):<12} {item['Date']}") 
     elif choice == "3":
         results = db.collection("Check In Confirmation").get()
                 # Display all the results from choice:
@@ -164,7 +165,7 @@ def search_patient_database(db):
             for result in results:
                 item = result.to_dict()
                 print("")
-                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}\n{item['TIMESTAMP']}\n\n")
+                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}{item['TIMESTAMP']}\n\n")
             
     elif choice == "4":
         results = db.collection("Medication Confirmation").get()
@@ -179,7 +180,7 @@ def search_patient_database(db):
             for result in results:
                 item = result.to_dict()
                 print("")
-                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}\n{item['TIMESTAMP']}\n\n")
+                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}{item['TIMESTAMP']}\n\n")
     else:
         print("Not Valid Selection")
         return
