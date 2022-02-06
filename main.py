@@ -41,13 +41,15 @@ def add_new_patient(db):
     data = {"First Name" : first_name, 
             "Last Name" : last_name,
             "Date of Birth" : birthdate,
+            "TIMESTAMP" : firestore.SERVER_TIMESTAMP,
             "Diagnosed" : diagnosed,
             "Injury/Illness" : injury_illness,
+            
             }
     db.collection("Patients").add(data)
 
     # Save this in the Patient collection in Firestore : Check In Confirmation:      
-    log_checkin_confirmation(db, f"Added {first_name} {last_name} born {birthdate}.\n\n\nDiagnosed with {diagnosed} and will recieve treatment for {injury_illness}. ")
+    log_checkin_confirmation(db, f" Added patient, {first_name} {last_name} born {birthdate} on {firestore.SERVER_TIMESTAMP}.Diagnosed with {diagnosed} and will recieve treatment for {injury_illness}.\n")
 # NOT ACTIVE
 def delete_patient(db):
 #     """
@@ -79,19 +81,28 @@ def add_medication_intake(db):
     first_name = str(input("First Name: "))
     last_name = str(input("Last Name: "))
     medication = str(input("Medication: "))
-    medication_time = str(input("Medication Time: "))
     dosage = float(input("Dosage (mg): "))
+    # medication_time = input("Medication Time: ")
+    
+#     medication_time = db.collection(u'Patients').document(u'result.id')
+#     medication_time.update({
+#     u'timestamp': firestore.SERVER_TIMESTAMP
+# })
+    
+    
+    
     # Build a dictionary to hold the contents of the firestore document.
     data = {"First Name" : first_name, 
             "Last Name" : last_name,
             "Medication" : medication,
-            "Medication Time" : medication_time,
+            # "Medication Time" : medication_time,
+            "TIMESTAMP" : firestore.SERVER_TIMESTAMP,
             "Dosage (mg)" : dosage,
             }
     db.collection("Medication Log").add(data)
 
     # Save this in the Medication Confirmation collection in Firestore : Patient Medication Intake confirmation:    
-    log_medication_confirmation(db, f" {first_name} {last_name}, just logged medication intake for {medication}, with a dosage amount of {dosage} mg.\n\n\n Day and Time dosage was taken: {medication_time}. ")
+    log_medication_confirmation(db, f" {first_name} {last_name}, just logged medication intake for {medication}, with a dosage amount of {dosage} mg. Day and Time dosage was taken: {firestore.SERVER_TIMESTAMP}.\n ")
     
 def search_patient_database(db):
     '''
@@ -116,9 +127,15 @@ def search_patient_database(db):
         print("Search Results\n")
         all_results = db.collection("Patients").get()
         for result in all_results:
-            data = result.to_dict()
-            print(f"\n\n\nID: {result.id}\n")
-            print(f"Fields: {data}\n\n\n")
+            # data = result.to_dict()
+            # print(f"ID: {result.id}")
+            # print(f"Fields: {data}")
+            print("\n")
+            print(f"{'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Date of Birth':<20}  {'Diagnosed':<20} {'Injury/Illness'}")
+            for result in results:
+                item = result.to_dict()
+                print(f"Patient ID:{result.id:<20}  {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {item['Date of Birth']:<20} {str(item['Diagnosed']):<20} {str(item['Injury/Illness'])}")
+                print("")
     elif choice == "2":
         results = db.collection("Medication Log").get()
                 # Display all the results from choice:
@@ -126,19 +143,29 @@ def search_patient_database(db):
         print("Search Results\n")
         all_results = db.collection("Medication Log").get()
         for result in all_results:
-            data = result.to_dict()
-            print(f"\n\n\nID: {result.id}\n")
-            print(f"Fields: {data}\n\n\n") 
+            # data = result.to_dict()
+            # print(f"ID: {result.id}")
+            # print(f"Fields: {data}")
+            print("\n")
+            print(f" {'______________________________':<10} {'First Name':<10}  {'Last Name':<15}  {'Medication':<15}  {'Dosage (mg)':<12}")
+            for result in results:
+                item = result.to_dict()
+                print(f"Patient ID:{result.id:<10} {str(item['First Name']):<10}  {str(item['Last Name']):<15}  {str(item['Medication']):<15} {float(item['Dosage (mg)']):<12}") 
     elif choice == "3":
         results = db.collection("Check In Confirmation").get()
                 # Display all the results from choice:
         print("")
-        print("Search Results\n")
+        print("Search Results:")
         all_results = db.collection("Check In Confirmation").get()
         for result in all_results:
-            data = result.to_dict()
-            print(f"\n\n\nID: {result.id}\n")
-            print(f"Fields: {data}\n\n\n")
+            # data = result.to_dict()
+            # print(f"ID: {result.id}")
+            # print(f"Fields: {data}")
+            for result in results:
+                item = result.to_dict()
+                print("")
+                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}\n{item['TIMESTAMP']}\n\n")
+            
     elif choice == "4":
         results = db.collection("Medication Confirmation").get()
                 # Display all the results from choice:
@@ -147,10 +174,14 @@ def search_patient_database(db):
         all_results = db.collection("Medication Confirmation").get()
         for result in all_results:
             data = result.to_dict()
-            print(f"\n\n\nID: {result.id}\n")
-            print(f"Fields: {data}\n\n\n")
+            # print(f"ID: {result.id}")
+            # print(f"Fields: {data}")
+            for result in results:
+                item = result.to_dict()
+                print("")
+                print(f"Patient ID:{result.id:<20}\n{item['MESSAGE']:<20}\n{item['TIMESTAMP']}\n\n")
     else:
-        print("Invalid Selection")
+        print("Not Valid Selection")
         return
 
 def log_checkin_confirmation(db, message):
@@ -158,14 +189,18 @@ def log_checkin_confirmation(db, message):
     Save a message with current timestamp to the log collection in the
     Firestore database.
     '''
-    data = {"MESSAGE" : message, "TIMESTAMP" : firestore.SERVER_TIMESTAMP}
-    db.collection("Check In Confirmation").add(data)    
+    data = {"MESSAGE" : message, 
+            "TIMESTAMP" : firestore.SERVER_TIMESTAMP}
+    db.collection("Check In Confirmation").add(data) 
+    
+     
 def log_medication_confirmation(db, message):
     '''
     Save a message with current timestamp to the log collection in the
     Firestore database.
     '''
-    data = {"MESSAGE" : message, "TIMESTAMP" : firestore.SERVER_TIMESTAMP}
+    data = {"MESSAGE" : message, 
+            "TIMESTAMP" : firestore.SERVER_TIMESTAMP}
     db.collection("Medication Confirmation").add(data)    
 
 # NOT ACTIVE:
@@ -202,7 +237,7 @@ def main():
     register_medication_time_intake_added(db)
     choice = None
     while choice != "0":
-        print("MEDILOG MENU:\n\n\n")
+        print("\n\n\n\nMEDILOG MENU:\n\n")
         print("0) Exit")
         print("1) Add New Patient")
         print("2) Log Medication Intake")
