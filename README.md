@@ -77,8 +77,6 @@ The development tools used for this program are Firebase by Google, Visual Studi
 The programming language used for this program was the integration of Python and Firebase commands.
 
 # Useful Websites
-
-{Make a list of websites that you found helpful in this project}
 * [Firebase](https://firebase.google.com/)
 * [No SQL Tutorial](https://www.guru99.com/nosql-tutorial.html)
 * [Data Options In the Cloud](https://www.oreilly.com/library/view/an-introduction-to/9781492044857/ch01.html)
